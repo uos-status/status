@@ -136,6 +136,10 @@
     .status-value.warn { color: #eab308; }
     .status-value.bad { color: var(--danger); }
 
+    .status-age-ok { color: var(--muted); }
+    .status-age-warn { color: #eab308; }
+    .status-age-stale { color: var(--danger); }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -289,7 +293,7 @@
       </footer>
     </div>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"lrOYnVLucbeGYDuy1AAMVQ==","iv":"Ek4/mgu9SSMnBi6A","data":"ZOpc4BZUpjqb5gje1y8aaAZB7x8uT4xdBeR2gNWWWY/5lffSgM0s+oPHa8vx7+wfbCE2dLnJRhHamfqAPm1egjHLYYgJYPRfWuuV6qGkyhrwg8RB55wu17NIWlo+Y3VYfpBWeRWppy8bvnPzMZwfkXpw2GSJEK+9YyncYj/2oYOCT9afAuYn8b4sukEQJtnWw33pTcwI3xYfOPb6i9BVqhKo1YYw74+K2OlYMhM9Y9ZZWoBKWXxb+aPZ9tHMnNYjKysqvI7yLJE49ismebh810Ug8k+RHAIgY6aBeZeZ4B+NmrhlY+kW+IgWvXKwa0BR2tgD5gi783omm1IRNjT3cDbuK9GE1EBt10nJMRN4vjxR9MBwfIaC+kJhbIYsvM8qQP0HW3PiRB+tKOARKswL8wy1cSvsHSOtCMvwIQKhK8/8oYKWmR+MdIX/5211QHEwQixphYbhjbSEaMjXEWgd0M7A9SmSplNlmPtJYmiEjxt/O5tB1jwFcgul98+afLYanXn9bTAexJYPVlm8WR2fmeoBZt1l9JhWyflP8AeUlten6Uvd34TjWMuU0Uh/Bbhe7QLD3hsz94JE5BKhmV4wPRnWBp9m6VmmSu0rWoCGvzxEsdUbWuNJfgCb5e6zO2kFQCj/c9maWJfLqYGoAZGOQqLU4w3ScCf22YyBGsQYcUF4ijSGzMzcJ/2iJkCc6uFzPXNTHdq9m3QKtnXtObJnv76W0oNREjnsfyysfB6OZUNx25CU9KQraGvCok2ppUKuvIlaD9rxFZ4VwMbxymOz5JuBc4BL5S7oJhUge/IVdeNVIE7rPWJMOpELdFKfdNi3MxakMWOoIbwedo0UvkSUcN1CetgzI0ORnoY3NyBzq5uNB6QbvA313fjB0SWChvQT5lxbH8g9sPjYEmxOtdow6vHOzHdW48ljYKPwH8EgMir4imUx8P9IhNYh1nJ2GNocUWMUDwiw7m8finUnOLKQbgysz7bgUSLetcl49oFAfYAzqMvFhrtCdCVUSIC8pGfHvcD/9cY+vxQzlGP8oxtFiQzfMw71+RFrCgcQzOfyAQy4LRVDWQg88sa8U5LTrN/Sat2Y61vLfg73THhJmeDUFSDSdnBqTDXuD9w3KtWmBqqHNPCmOn3OUuQ1WcbT/eaDKthrccVNVMsn0BYFikK9oWdG7/meSdu6tTgmiqL/7Zn21t2m5rjllaUi6+0DIghGEQ/9OnerSPkW0f4M9K3v2Ok03bozudmNtCIlu5XNZVo6uIgoMoDZXJhVnS+trlfOT7t01LAsfVViUbemgQporcgv5fvhps3PWoFXfrPUiG9kKHnSjgx9OQBopTAXIGXd+5Ruy32p/KLY3g5M4vnH322lFXmwQDK5dyOSsD0lJ4bgdW7CC95S1pUcCysQFfvSJA3fYdAih0X4A8oh9Xm+zrYZcMgOT7EF9FjisiTkCcgsci2fVL4tr3U/auG9Fg=="}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"usFd5qWJFiHSmlc+Jd+1Sw==","iv":"xXwUPAsoWdIzqUTu","data":"A2erSdodk7+6MVL5E1vrM1H7KuGTdUg8SCFZhUh6zI0BBTImVAQY9oO9rxu/lY5bZGAvpJjtBY3YorJRmosw7gENdoloZZs36cuzL12Dve75+vFNlopP8MfAl4gjguyQYgczXDS228cP1d+JLqZ2ZgAcAQPb3QlyvqozlICbFwjWjLG/PJUheUS1vaooxORgNQGQSRr3ejXkOMCooeQ+qJJ4t/28wDDHgt3GdwhceTH9wUNFWLY/7Z3/pB7cO9ypMwIK80LXhmZkOZqQf0u97RXpp0zWNUg22jf843VG7sflAtKc5KMdtqnjl9RZPdYm/avY029hZIuwozh4PmgS6pnCPGncDfRKgHNFKJRy65vZe97lU/SUB07EqAQjLpwTwlZ6irEpUyLiKoO5kb/MVVXzk3R7OIUhQkQFAIynL6/4FCrtQMMB7Awpe8JVozwlXxu3iksKXt3MR1MoPbHLMaH4Yi6MQe5kmSiJxSy0g4sakHYZTvYpTwL/Wug2uEjzW12RcSLAHzkFMXdwCxj8jHqiQlYFj9e5UyW1rmzCB8+wBS+jm5rkAJQOQNet8F1Ew65bi9TArWJ2kJ9U+EfYek/MdMERKk8zz8QkNtTF9tsc03v6O6AnZNDa8STRQKFWvdGa6TKzn6i/vb8q8oNzwjVOPjZpqCZ10LxnxK1rhRUNk48wrrGmgoJXuImAHzsFDqIcAybNeolVSCibdVC9SIZf/1mKHDtvR7GnWoINfcHxojzbBKE7aKOwxk6JSTJeEqBzmiLjM93kxWtoiejb1Xw3CUfsII3Ez+is6n+8ttie/wbE5wHhxVGo3E9KyPHlvBb8qmeehIHlN/xxVMaidvA0yoRTvNFSzfSSlaz+wej880c6GtuaRZ3rE65hgW7cpe1ZLsAnkvaNZkjx+SFY+2Hi+KQvQCiguDdCKw9Ol7w7Q/HgDbcWLpZCfWB6Nw1QmtV0Og+ID4pMo5n4ClVWDm1cIpoVLuSG9fbj83dxqKfs4UcuA76XNfr2H6HQPpQl4WjZ4c2436ExBwqconmUQtX9BHORhhTE7LP0k+1DEMz5HTfaYQd/jVNKa0t3xACNH/LEeyAvb8MyMmzZGix8JJqGf5uUoI0bvMVn6nZHhRV8uZ3VPn4tS5s1BUAAb4Vc4j+fN2Cq1xZWFq0xarNas4HGgCQFePsOxd7YlFXf56q2FTBXLHFMqwgukVsKjYv4ubaY/og0yyNdRYKmP2+7Jua8XrPxvLbNJkY5ri72h/36govdyL98At3fCdsO8NkSBgqxvYbTpwImGpUfuT0r2cvavwRa8u8a9myHAVU2glZavOjwxmUSEXDPPyga0uLI0P+XNMujPM9r3s4j+jSIdrFzf99M/1tqdz6/jHQ/lL7OcfJYgQkS1LBkK4LXsjyZCgrjtx9l24w3gf6cCkdl9+6dkYW/1Uqm4MYm19w8nHZ0uSaIiLrx6STYhYmyhA=="}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -379,6 +383,18 @@
         const when = formatDate(data.generatedAt);
         const age = formatAge(data.generatedAt);
         generatedEl.textContent = age ? `${when} (${age})` : when;
+        generatedEl.classList.remove('status-age-ok', 'status-age-warn', 'status-age-stale');
+
+        const d = new Date(data.generatedAt);
+        let ageClass = 'status-age-ok';
+        if (!Number.isNaN(d.getTime())) {
+          const diffMs = Date.now() - d.getTime();
+          const minutes = diffMs / 60000;
+          if (minutes >= 15) ageClass = 'status-age-stale';
+          else if (minutes >= 5) ageClass = 'status-age-warn';
+        }
+        generatedEl.classList.add(ageClass);
+
         hostsEl.textContent = `${up}/${total} up`;
 
         pillDot.classList.remove('ok', 'warn');
