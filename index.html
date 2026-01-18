@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Network Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg: #05060a;
+      --fg: #f6f7fb;
+      --muted: #9ca3af;
+      --accent: #3b82f6;
+      --danger: #ef4444;
+      --ok: #10b981;
+      --card: #111827;
+      --border: #1f2933;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      font-family: var(--sans);
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+      color: var(--fg);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 0.25rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.4rem;
+    }
+
+    .tagline {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card {
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #030712 100%);
+      padding: 1rem 1.1rem;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.7);
+      margin-bottom: 0.75rem;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--danger);
+    }
+
+    .pill-dot.ok {
+      background: var(--ok);
+    }
+
+    .pill-dot.warn {
+      background: #eab308;
+    }
+
+    .status-line {
+      display: flex;
+      gap: 0.75rem;
+      align-items: baseline;
+      margin-bottom: 0.2rem;
+      font-size: 0.9rem;
+    }
+
+    .status-label {
+      width: 7rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .status-value {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+    }
+
+    .status-value.ok { color: var(--ok); }
+    .status-value.warn { color: #eab308; }
+    .status-value.bad { color: var(--danger); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 0.45rem 0.35rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 0.12rem 0.6rem;
+      font-size: 0.72rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--danger);
+    }
+
+    .chip-dot.ok { background: var(--ok); }
+    .chip-dot.warn { background: #eab308; }
+
+    .muted { color: var(--muted); }
+
+    .mono { font-family: var(--mono); }
+
+    .footer {
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 0.25rem 0.7rem;
+      background: transparent;
+      color: var(--fg);
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 1rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Network Status</h1>
+      <p class="tagline">Encrypted status snapshot. Decrypt locally with your 3‑word phonetic key.</p>
+    </header>
+
+    <section class="card">
+      <div class="pill" id="pill-status">
+        <span class="pill-dot" id="pill-dot"></span>
+        <span id="pill-text">Waiting for decryption · Press "Unlock"</span>
+      </div>
+
+      <div class="status-line">
+        <div class="status-label">Snapshot</div>
+        <div class="status-value" id="status-generated">-</div>
+      </div>
+      <div class="status-line">
+        <div class="status-label">Hosts</div>
+        <div class="status-value" id="status-hosts">-</div>
+      </div>
+      <div class="status-line">
+        <div class="status-label">Key</div>
+        <div class="status-value" id="status-key">not loaded</div>
+      </div>
+
+      <div style="margin-top:0.75rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <button id="btn-unlock">Unlock</button>
+        <button id="btn-forget">Forget key</button>
+        <span class="muted" style="font-size:0.78rem;">Key example: <span class="mono">alpha-bravo-charlie</span></span>
+      </div>
+
+      <div class="error" id="error"></div>
+    </section>
+
+    <section class="card" style="margin-top:1rem;">
+      <h2>Hosts</h2>
+      <div id="hosts-table-wrapper" class="muted" style="font-size:0.85rem;">Encrypted payload not yet unlocked.</div>
+    </section>
+
+    <footer class="footer">
+      <div>Data is encrypted end-to-end with a passphrase-derived key; the passphrase never leaves your browser.</div>
+    </footer>
+
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"4mg0SBuDt6Ywj6Ww0vZ55Q==","iv":"EJqBxJ2q0XF1Jwxb","data":"q8kpiEeL73lLqyPhzTX1xe1udI3nsLDUzX8/unKmNFPm4WY55+BJl60Ht8DNiqKRPDT9Q+AxBZUQyuZxxtSjD1Ujp3d9LT1NohdYrHpCW0Dv/PLb7V1c/mgkNIji1AVJa0EpelQyRlDGJi1SUYoCHH5r96dCXQjjkhR24Zz3s5S5I7QSuBG6IZu6zlofoS/UJksVX03phbFAE3Eg4JGK4DkKxe3kisxIntaNQx2LtDSHJcA7gDmXlNnp7w7T/fn8dEh5+5aoZhYgHRxyCwCDmxSwasuH/j69rNOGpAaBGAT22hocQG1M2LIze/PcdChKU2FJjbbWEb/civGxJq18RVFyC/2NT+9QUf8Z1RBMXEPwv37h0ND2+KbUHmpz"}</script>
+
+    <script>
+      const STORAGE_KEY = 'networkStatus.passphrase';
+
+      function base64ToBytes(b64) {
+        const bin = atob(b64);
+        const len = bin.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes;
+      }
+
+      function bytesToString(bytes) {
+        return new TextDecoder().decode(bytes);
+      }
+
+      async function deriveKey(passphrase, salt, iterations) {
+        const enc = new TextEncoder();
+        const baseKey = await crypto.subtle.importKey(
+          'raw',
+          enc.encode(passphrase),
+          { name: 'PBKDF2' },
+          false,
+          ['deriveKey']
+        );
+
+        return crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt,
+            iterations,
+            hash: 'SHA-256',
+          },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+      }
+
+      async function decryptPayload(payload, passphrase) {
+        const salt = base64ToBytes(payload.salt);
+        const iv = base64ToBytes(payload.iv);
+        const data = base64ToBytes(payload.data);
+
+        const key = await deriveKey(passphrase, salt, payload.iterations);
+
+        const plaintextBytes = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv },
+          key,
+          data
+        );
+
+        return bytesToString(new Uint8Array(plaintextBytes));
+      }
+
+      function formatDate(iso) {
+        if (!iso) return '-';
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso;
+        return d.toLocaleString(undefined, { hour12: false });
+      }
+
+      function updateSummary(data) {
+        const pillDot = document.getElementById('pill-dot');
+        const pillText = document.getElementById('pill-text');
+        const generatedEl = document.getElementById('status-generated');
+        const hostsEl = document.getElementById('status-hosts');
+
+        const total = data.hosts?.length || 0;
+        const up = data.hosts?.filter(h => h.up).length || 0;
+
+        generatedEl.textContent = formatDate(data.generatedAt);
+        hostsEl.textContent = `${up}/${total} up`;
+
+        pillDot.classList.remove('ok', 'warn');
+
+        if (total === 0) {
+          pillText.textContent = 'No hosts in snapshot';
+        } else if (up === total) {
+          pillDot.classList.add('ok');
+          pillText.textContent = 'All hosts reachable';
+        } else if (up === 0) {
+          pillText.textContent = 'All hosts reported down';
+        } else {
+          pillDot.classList.add('warn');
+          pillText.textContent = 'Partial outage';
+        }
+      }
+
+      function renderHostsTable(data) {
+        const wrapper = document.getElementById('hosts-table-wrapper');
+        const hosts = data.hosts || [];
+
+        if (!hosts.length) {
+          wrapper.textContent = 'No host data in snapshot.';
+          return;
+        }
+
+        const rows = hosts.map(h => {
+          const statusDotClass = h.up ? 'ok' : 'warn';
+          const statusLabel = h.up ? 'up' : 'down';
+          const latency = h.latencyMs != null ? `${h.latencyMs} ms` : 'n/a';
+          const ip = h.ip || 'n/a';
+
+          return `
+            <tr>
+              <td>
+                <div class="mono">${h.name}</div>
+                <div class="muted" style="font-size:0.7rem;">${ip}</div>
+              </td>
+              <td>
+                <span class="chip">
+                  <span class="chip-dot ${statusDotClass}"></span>
+                  <span>${statusLabel}</span>
+                </span>
+              </td>
+              <td class="mono">${latency}</td>
+            </tr>
+          `;
+        }).join('');
+
+        wrapper.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Host</th>
+                <th>Status</th>
+                <th>Latency</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        `;
+      }
+
+      function getStoredPassphrase() {
+        try {
+          return localStorage.getItem(STORAGE_KEY) || '';
+        } catch {
+          return '';
+        }
+      }
+
+      function setStoredPassphrase(value) {
+        try {
+          if (value) localStorage.setItem(STORAGE_KEY, value);
+          else localStorage.removeItem(STORAGE_KEY);
+        } catch {
+          // ignore
+        }
+      }
+
+      function updateKeyStatus() {
+        const el = document.getElementById('status-key');
+        const value = getStoredPassphrase();
+        if (!value) {
+          el.textContent = 'not stored';
+          el.className = 'status-value warn';
+        } else {
+          const words = value.trim().split(/[-\s]+/g);
+          el.textContent = `${words.length} words stored`;
+          el.className = 'status-value ok';
+        }
+      }
+
+      async function unlock() {
+        const errorEl = document.getElementById('error');
+        errorEl.textContent = '';
+
+        const scriptEl = document.getElementById('encrypted-data');
+        const raw = scriptEl.textContent.trim();
+
+        if (!raw || raw === '__ENCRYPTED_JSON__') {
+          errorEl.textContent = 'No encrypted payload embedded (cron job may not have run yet).';
+          return;
+        }
+
+        let payload;
+        try {
+          payload = JSON.parse(raw);
+        } catch (e) {
+          errorEl.textContent = 'Failed to parse encrypted payload.';
+          return;
+        }
+
+        let passphrase = getStoredPassphrase();
+        if (!passphrase) {
+          passphrase = prompt('Enter your 3-word phonetic key (example: alpha-bravo-charlie):', '');
+          if (!passphrase) {
+            errorEl.textContent = 'Passphrase is required to decrypt.';
+            return;
+          }
+          setStoredPassphrase(passphrase);
+        }
+
+        updateKeyStatus();
+
+        try {
+          const plaintext = await decryptPayload(payload, passphrase);
+          const data = JSON.parse(plaintext);
+          updateSummary(data);
+          renderHostsTable(data);
+        } catch (e) {
+          console.error(e);
+          errorEl.textContent = 'Decryption failed. Check your passphrase (3-word key).';
+          setStoredPassphrase('');
+          updateKeyStatus();
+        }
+      }
+
+      document.getElementById('btn-unlock').addEventListener('click', () => {
+        unlock();
+      });
+
+      document.getElementById('btn-forget').addEventListener('click', () => {
+        setStoredPassphrase('');
+        updateKeyStatus();
+        document.getElementById('error').textContent = 'Stored key cleared. Use "Unlock" to enter it again.';
+      });
+
+      updateKeyStatus();
+    </script>
+  </div>
+</body>
+</html>
