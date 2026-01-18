@@ -227,7 +227,6 @@
   <div class="page">
     <header>
       <h1>Network Status</h1>
-      <p class="tagline">Encrypted status snapshot. Enter your 3‑word phonetic key to view it.</p>
     </header>
 
     <section class="card" id="unlock-card">
@@ -280,7 +279,7 @@
       </footer>
     </div>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"AazQlqThgyrPXpVlCmUyfw==","iv":"VKIgi5deI059UUMB","data":"fU5EulH/rnJHZPuK4uh/AWJj4eLbvUGlewSQf7xDmyANyK5F8ByzR1MmdoJUys0IXTA0WDPZ4ep++RD9/ZXFJdjltNlTKMe/iob4jGhWBNQ+YVgBjAo40sq5A0CmC3cE9JaFtfGM/GpCdUXEBG25PZT3oSIuWmG9mBqbFk6aEK6xxloVh4Z9UVpTPDF3EX8QfzlktpDMkPXrgmKUUVenkb095HMjM+T14nDdPC1E55YHd3naAhBaKfhD73R9mrtfzmwrSPQe6LJNIfpqI4I+B7Qfz3cvEG336XnO/iLVNrV+T8ve4WCw5TLl4mTSiA8O4Fixri+94gi2PzFS6V50hAbRtKCL0ZEY81PFOVxrSKUz4EKKrAxIea4aszPf"}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"arNaJY2MuqCAO77ulkrurA==","iv":"7AB7JfcE/66sEeZ4","data":"9P/too+H0oIOijGoJwmp2LhbusdhiqIMwExoGQt/9FlK0BW8fI6Ih8wmYTtpwPXhrBA0PV7YAfe3+AkYQHHbGBWm9BwZQyZZmBsWsIxi/DFNniw3qqBmx+JtJH9LzHS5ysoUcnuslJ7q+M3KeAQ9VRYCqgPaln5/YWk3htKIimbaBKNWMWAOXRFYXYEgp6zhQ8BLjjY/Fo3Xkj/WaU9T1wsKaAwmu8+AUf40nCtUAy1HH4bZoG2diburXgEZU8xqG4TrAviNPKRWJk1hcMlt/fJh+TTQqidpKIIGiN0VQhd7qmeu0R27pZZ4Tfg8XJ6a2+BmjfBmcp9+oHOWIH14+zkhQaYTuo6Nr6U21M1eAIFHR6LvbNeLs7MtaGRFFTfAZHk6Nv8o/Hx2EtK+u/hB57Ydt7CfIpdoKhnIeiJNbF5kJfWgHRmNlgzHm+qGY1UfppOLc/bwa7cG8OQam3s3q37U+eGawjv/JMmlreVeG9i/HwpiLC2uSM8mPDBlPNeGkR9ox5+bqLxb07b0Ez9w4Bk/pQRHuY0jc+LzrT3iQ9aWJZR7RSpkn5bPJkz5vrDJmlv8Zq6tkjFgBVoUB7QG+867/Nwih2oX+YOIM1rSJ0BPzxuut1kLgqZsqhfYKdMZq32ccLctI6080FZyXsTgigKhknMAYryqaalTPvdJxfFdnCqI8X+vodtSYFjSNTlIzl8OL9c5i8F3BEVPFYOEZAig8/BS239jXivmjh72K9SEx14RvgqfhkCYHTTrUJB3IcJEwvQFDLmdOCqH4jeQNjsbQTAcqAq7GSVDELERDsckhoOFzph4+fr6zfQLPQRO4NOSGeoj/Tm8OCzxrHL6FHO+N7Z7Y+tq+0DMhIkJ6T35h0t509E="}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -385,6 +384,20 @@
           const statusLabel = h.up ? 'up' : 'down';
           const latency = h.latencyMs != null ? `${h.latencyMs} ms` : 'n/a';
           const ip = h.ip || 'n/a';
+          const httpStatus = typeof h.httpStatus === 'number' ? h.httpStatus : null;
+
+          let httpDotClass = '';
+          if (httpStatus !== null) {
+            if (httpStatus >= 200 && httpStatus < 300) httpDotClass = 'ok';
+            else if (httpStatus >= 300 && httpStatus < 400) httpDotClass = 'warn';
+          }
+
+          const httpCell = httpStatus !== null
+            ? `<span class="chip">
+                  <span class="chip-dot ${httpDotClass}"></span>
+                  <span>HTTP ${httpStatus}</span>
+                </span>`
+            : '<span class="muted" style="font-size:0.75rem;">n/a</span>';
 
           return `
             <tr>
@@ -398,6 +411,7 @@
                   <span>${statusLabel}</span>
                 </span>
               </td>
+              <td>${httpCell}</td>
               <td class="mono">${latency}</td>
             </tr>
           `;
@@ -409,6 +423,7 @@
               <tr>
                 <th>Host</th>
                 <th>Status</th>
+                <th>HTTP</th>
                 <th>Latency</th>
               </tr>
             </thead>
