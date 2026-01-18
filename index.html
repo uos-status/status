@@ -241,6 +241,10 @@
       .host-chips-mobile {
         display: flex;
       }
+
+      #hosts-table-wrapper table thead {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -300,7 +304,7 @@
       </footer>
     </div>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"JOA0LAc0uTiM9QE+KRp9ZA==","iv":"TpMk2IMvHsrFY7zV","data":"kJfi0sDwdMGbQMpYbAm0rxcTrHBA9482Bq8fcPOjMB2CXNfvQ5tKml6hFPXpJBpvIzoUBMUZLtMEYTthOJG5dfUJ7Cu2DkLxqa9iVyKR2JeW2YUs73O8cNW00ctwoF+rl6U+YMyt1n7bvDrV/+nqRUL6h8x79wWzUv4I91D4ACD/EP+PEeURdNZeV3yOVmp3jSvNM8gvlRPuebNlJha4z7N53JgtcssQJienV93GCnj3BqpSCOTGDDVhaEZBbqpnKKHUguTUAt5U7mdNS7IH22f3IJOeqXryHhOFFjnoBPXR+yXjdFrliD73VZcyHMv1DVszkCLrSZXXQfstsJBsbA6WjZxVuNJTsFI7370HEipeN6ufObSEoTmPZ5wrh9vmQt9bZy29Ihyd7YrFf22wXqk9Fpd2YV4MVZDBGu09Dvg9fodxudj7eZdDp7jQM9KK6TXf8Hjv+BTj7920UgpuAu4Lv+O/YpGwJ4ZKAQq/zD6aKvAal5sOe08iNtROJp0tOk5LKCLUNAC6uo3dwJt/QyuYtTMFHKtRHEFu/wmKTxB5oaALI9CfBNmi0eiHWY4Jg2iPdIeb+ZWtdX3ncXYfGUcp1YBDppWB21QxWgNwGW/TrQmWF/tZyKcsi6VsCMNsqCf5VFo1GVWrQ5MawLhMczkzxhYEn+DYCXyDqO6N56FWvBv4dnMwojYoZ6QZPRQk4i0O/EzcAa8xio2PtKM8FgSZDSMatr9H6X1v4G+KVvHBmLbNqopJ1Fei4uq15Ps49lqKH2+Z9qFmc6nseFNXnJCcmyTbOGh+tyUHB8pmhtxbUMb5PUYjJN7BMba7TJtCaMoDQza8zmWJDd4VcWdPap6BEuJ3hoapDCNzl263dFIDNwwkJUy2XMaZTpJi0Mz5BBqrJs8CMaaJ2Gpy5kdAJ8JC0VNhKvUHItRj1n9EKiP7Xw/5bCNhPVEXP/557T55qTK+OMLnYLSYldX8+RLf0jL26Jfx5NMUrZZ10vRgX2GBvKlxvWV/A3Du1iTUz/ebARZ91JKR2qhSU3CsZwVh5Xp0TKkLM8DHUXHwrN7gtQ=="}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"KKabptX0etZVgQB7Ze+fRQ==","iv":"tAleOCi6zdPNVJFJ","data":"4Ybw9Lx8mpGZfjY4UUGt1Q7eTBJh22blfM1PrbhVTeI5WsqrEdoFKtQ756C+mg4tPU3FaqSFHABPTKuKl9Aazf2w5Uty6DXMoDhumwltCAVR/96ZtpUO4IajawRGEqfh1dZ9JZf9I63FnX7QPzFh+X3g/SfJr6DzfdHZP/4STpbvnJ3liY0XDugVcCA4YUIKokfl4jg77qlboNE8/RFA5k/88PSx3856E+RfwU8eQNc1Zu985CTX8wgd51r7iq4TA/YiE4wENr/YakMnFjTa4As3cyLX+N+QdMRcPjsG0sacPz5SyDj2dTgzL8cfD+7J143uWCGKzZZ9u0dMxT2qVOvgNuofw1EMRwbV4yfUNFoNoBKqFYW6tt4yrsFfepWq9VJhJEhsRFIMpjQXvGsLXhiXJYZJn/ezSdtGmbAjvTN6oZJvu5O6rELfhRl8dPupOwWvXe3M25i0XfzHDsyK23W+7h0i2gkDQNQtv13232KVo9bVi/idQBLiBzotL5PPl6zHkwiGFdO6PTKTbcQGjyYRvw8wBjNv7uhiqVZctW2Vj/jG91gU9wHhanGmbLuLq4LwX2ySkASNjSgOAlFpyGxXPNeblgPpt0viDJjSY6ly+R4gYB1Hoj3++hj2E4/3l1TnE/PqFW/9ncwlWA/bXLuoHrS5r9hpV9Mlza4kS9nctLA8SmeS/dy/U6yx5LeuS+YNfKOHaaIgvkFfwGtt5+sBpaBMX36Zgsgc1prdQbFM3l/kzqwIV3Y3wxrwBmiXT9FZkhpfXiJnXSaNbGZPr7gVOMSkNT8uHKAdQnzovs5UqHZn5F86jsDwCebNZvI2aXq5DQkzmWVEn87hdvJqvbiNtkqAHHQ9u/jIQSV8AFn2orEHAkPTNkQ4L/L/0cXpMLUbXFaEZHu6gQTnYHBmb3mu9AMpUkuK0QeeXyPE6GCdcoezoZiNGDV9S6tTY5pHvbASfqbJESGNxiP+I0w2+H420Ka2YBX4ModZoIhkS49J/kUOCTZZ4FGllt+wW0duQGNk4MTw9LMfTODjWqz0uFhSIa9K+AxUkQ83fE7AGAs="}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
