@@ -187,6 +187,15 @@
       color: var(--muted);
     }
 
+    .forget-link {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .error {
       color: var(--danger);
       font-size: 0.85rem;
@@ -267,10 +276,11 @@
 
       <footer class="footer">
         <div>Data is encrypted end-to-end with a passphrase-derived key; the passphrase never leaves your browser.</div>
+        <a href="#" id="link-forget" class="forget-link">Forget key on this device</a>
       </footer>
     </div>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"MuOKmMWEYeVe4FJE22d+4g==","iv":"0RUgLWLYqUm9uDvX","data":"wDPPaSkFHLFQRnbDxtNL5+l/2ws3hzRLnynsiDb8LVaeieO0MLx+1Zei2sYsNnlds3n/GtUJKdF9jdGZmGHSCltbvdydmM8UsQm5bKPozcNzoYrJMXmXjWbgpuYKuyzzE11mf6fpUPVGq/1JRxHCd3dVqVmFlJbJNwD9Rdss4xlaarPLeVD6vmgMkYhL+TKh/hRnAoJc1cYh2DtTAfLKok5IaNBv+0cU44/YCauV5sNfnJIu/T+L5QkoI/HS9dcl1XSkME6khD1N82PFjDaB37AUCExwG9Y39pXvI5O6KfThv83O8fybK7W8ODlC6J5oZsJF22Ms0AxAztWXGFRDZaw1qX/RlOZYu+H9e3/lMWbDVH3e2fl7uhl9W1w0"}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"AazQlqThgyrPXpVlCmUyfw==","iv":"VKIgi5deI059UUMB","data":"fU5EulH/rnJHZPuK4uh/AWJj4eLbvUGlewSQf7xDmyANyK5F8ByzR1MmdoJUys0IXTA0WDPZ4ep++RD9/ZXFJdjltNlTKMe/iob4jGhWBNQ+YVgBjAo40sq5A0CmC3cE9JaFtfGM/GpCdUXEBG25PZT3oSIuWmG9mBqbFk6aEK6xxloVh4Z9UVpTPDF3EX8QfzlktpDMkPXrgmKUUVenkb095HMjM+T14nDdPC1E55YHd3naAhBaKfhD73R9mrtfzmwrSPQe6LJNIfpqI4I+B7Qfz3cvEG336XnO/iLVNrV+T8ve4WCw5TLl4mTSiA8O4Fixri+94gi2PzFS6V50hAbRtKCL0ZEY81PFOVxrSKUz4EKKrAxIea4aszPf"}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -489,7 +499,9 @@
           renderHostsTable(data);
 
           const main = document.getElementById('main-content');
+          const unlockCard = document.getElementById('unlock-card');
           if (main) main.classList.remove('hidden');
+          if (unlockCard) unlockCard.classList.add('hidden');
         } catch (e) {
           console.error(e);
           setStoredPassphrase('');
@@ -509,9 +521,24 @@
         updateKeyStatus();
         const main = document.getElementById('main-content');
         if (main) main.classList.add('hidden');
+        const unlockCard = document.getElementById('unlock-card');
+        if (unlockCard) unlockCard.classList.remove('hidden');
         const errorEl = document.getElementById('error');
         if (errorEl) errorEl.textContent = 'Stored key cleared. Enter it again to unlock.';
       });
+
+      const forgetLink = document.getElementById('link-forget');
+      if (forgetLink) {
+        forgetLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          setStoredPassphrase('');
+          updateKeyStatus();
+          const main = document.getElementById('main-content');
+          if (main) main.classList.add('hidden');
+          const unlockCard = document.getElementById('unlock-card');
+          if (unlockCard) unlockCard.classList.remove('hidden');
+        });
+      }
 
       updateKeyStatus();
 
