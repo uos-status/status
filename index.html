@@ -279,7 +279,7 @@
       </footer>
     </div>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"y7xeYQ4XNFniXyFueZ1oRg==","iv":"so6wcqyxFiDbyXsu","data":"J8FKVXGZpejsRDuEcNI4xekkwRFl8M/m/62uq0fV9tBri5ehLkF7l8LbWG7Um9CjDSM96scY4G3I50W4YMiTa1FFHG4wAQDl1H+kVMh5ssuO/6BRBTNeJe+D1g6MyL3Wah+AZ7MEwczHu6BgY9yy5IeLNwhf5+CGgedHvHUu5GtM+ZMSReeUNO8iu2T6UsBVdk2XFK4Uvi04aRXM3LLR/fjxrZaRQ5RkQIaPtDGLMOLlqVAn8geLBMgYiLU6oY66LKi0tlgNUPsRMPvrderrmJ5YphLCuIYV3XujheKTWgdn//7O8993Uxb0BcMynbdCMPFdlEvAQyPJ8Ak6+ATtTiNk82GZ+4KKhfKxK+OLZhJdjvzOfpP2OVcBcAVkKxwW+6nCK5i/WPBOPaLdNWCvGYcCo5YDWnuUXcI/xwMR247C0r6NP+MCS4t5heclPXePjLIY8D8ykcfLbRCYhNCaohnjdaQnYJerGUXDF45KByM0OZdASfc00OtxBnxAqYTojr4tMqCazvmq7WIKUCNf1weN54mC+CpSntM2lXyCSEnWrpgIgrpNcmg37QhHKIi354sJb2muYRMLKH/L0bJgOfb+um+4ovGehgm1ZIqmw6SEInhpRKe52wmB4EDw9z3y6rFyu/F4rB8szjQLn3GL1bKlrUtwo4zMEWva/n5mF5JbEFXkIpG24rkasoKf2sV9ALWAveFbvwMvdNPawZPJ0aRs6LtVtW0uAIe2Uv7+cSex26UZI2VgA62hVfQMqiPu5ymYQnDWXg/MPWyR8H32AATbcGrfY+bjtAiRDnuoBxsWxAuL7dUltp4fJG1q01Uds2CkwytkiGwv+fK4wIdhRfR+8rJ/U+99vEAHuxqW4ja7A/BJ"}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"lGFxDhMww9wzvoRGVEV8ZQ==","iv":"KrGv2yw0zqfcaJOW","data":"KnUmszbSe7MJ4xVbaEMCl9U5tj/zXIpf9RUjwVBEeeeEbL1QN2WJ2674AMCNa/F15d4C8GWWHpO8kHXbdlJ09A8akvImvadH8hXn4k+tdlws1ou2XMJ8Pb5QU4sgRIU0knnK6XS69y0sdX4E43+pFBBM1Tj3RYK2sCSspdCHzOmzbIuP6KxVyo7ybKsmidno/2MmN94yrlY1euGogg3TaxwlzqTdw1TqjAMCiTJU9v4dAKWik4h+M7gBiu/j9oJpw2jnCEnj9lLl1MmuTNr0JYPeN+l/rr+//rOmM6rmRY2lnNOf3AJZjpj1XezxKZq2D39UZH/iqrJWOlEolYwgHccL6hXsYbpn6tnsC+Db7fCPC5F68YzsuzPz+sWIxKHwNyi/8+NPfulwuxZlQq5h90E9A7bK2M8TartrEo06dggf3PcDvuf71pvd975WFFvuNH8dXRW3i1xbE6FJWneDZnaBIwaRy8SVBrtv0YrS1XZmIzAhJZHaGX56oHGJ1MYBUf4bHxFSoMqsSh9eCmYhqpcfpfEapX8U9pSrPi2Q/eHOcdroZaFmlczY1kE2gTIKPNBKUnlHwaycCU+f+Ld3OzLR6y0YpxTk1ETIzhyNBNMz9AoEY/LCtPCHqD9G9qvxplPG+KqJStKeLsHA8pAHYsaFc9xzvx33EasubR2DbRpNiQ4zsTT3MHlLH4DmiTQE0Yrsp92p4OVliSTCWqAiHIQZLJgULjz7NLxuSupPC9GfCyYaHVazjha9lu7mYtBfyZTsteEZCb5Pl3hoiqJ3l8XWai8f4CLf6zQCEt7S1DuLeGPYwLbrmZzzojleUzqjfdSliMeqdm0Gz4zng25igO2GBO0T3rNsj8JxG5JKG8Jl3T+sWrjQXSS3ReFGpD5VA2doRjy+ka1+NIC5LvI50CpL+bcUT5KSyDZXBtDxp973CTeYmhVnRJ7kRbg/qrCMiJ87Oqi9XI1ZgnX7LL377S3Sx6V6tn4C7amBgj9s0WDwScb2S9uEeveHQHGLFohxVU4ISIRk5r0vharnBKNgbEncjlXHGhQUGREoiagH"}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -383,7 +383,7 @@
           const statusDotClass = h.up ? 'ok' : 'warn';
           const statusLabel = h.up ? 'up' : 'down';
           const latency = h.latencyMs != null ? `${h.latencyMs} ms` : 'n/a';
-          const ip = h.ip || 'n/a';
+          const ip = h.ip || h.name || '';
           const httpStatus = typeof h.httpStatus === 'number' ? h.httpStatus : null;
 
           let httpDotClass = '';
@@ -395,7 +395,7 @@
           const httpCell = httpStatus !== null
             ? `<span class="chip">
                   <span class="chip-dot ${httpDotClass}"></span>
-                  <span>HTTP ${httpStatus}</span>
+                  <span>${httpStatus}</span>
                 </span>`
             : '<span class="muted" style="font-size:0.75rem;">n/a</span>';
 
