@@ -245,7 +245,7 @@
       <div>Data is encrypted end-to-end with a passphrase-derived key; the passphrase never leaves your browser.</div>
     </footer>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"4mg0SBuDt6Ywj6Ww0vZ55Q==","iv":"EJqBxJ2q0XF1Jwxb","data":"q8kpiEeL73lLqyPhzTX1xe1udI3nsLDUzX8/unKmNFPm4WY55+BJl60Ht8DNiqKRPDT9Q+AxBZUQyuZxxtSjD1Ujp3d9LT1NohdYrHpCW0Dv/PLb7V1c/mgkNIji1AVJa0EpelQyRlDGJi1SUYoCHH5r96dCXQjjkhR24Zz3s5S5I7QSuBG6IZu6zlofoS/UJksVX03phbFAE3Eg4JGK4DkKxe3kisxIntaNQx2LtDSHJcA7gDmXlNnp7w7T/fn8dEh5+5aoZhYgHRxyCwCDmxSwasuH/j69rNOGpAaBGAT22hocQG1M2LIze/PcdChKU2FJjbbWEb/civGxJq18RVFyC/2NT+9QUf8Z1RBMXEPwv37h0ND2+KbUHmpz"}</script>
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"ROWtR3tj4mL1cZm5J98ruA==","iv":"q1HDNcVrgQtDp5Qs","data":"CGQq0waNwtz97YVGXkxcwK4oeXBOkHeKeq+pr7lA1OQruibqxgANfoEN2ntuq58JpIgWxPQl8Xq3PU+N8WaAmLH0QTxVe6w8LAXlmP1NE5ptFeXx6X2wkyYbUzweU1cFQPHGWTw3EY1UOsk8C5FzEOkT8+WBMwZrxpYESpALHFMLJ/1YbLzWpirkBXrDrk8X2eK+M27rjclVyBbUM87I45qr+GX6os9P8U83BChKzRD7klrpPrix5Erz/R4cqEIcNhz+MUIqr4bsne/02wG20KmLBmqaFgdF24pkm5d8EztAjOIUk6QH3LrKHmQaPTdNV1rP4ICFITAw5v0FfqqX+ZF8LpswJPC/Av8j8RU3y/hgSdCWJ7uyG0bL3IVn"}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -414,7 +414,8 @@
         }
       }
 
-      async function unlock() {
+      async function unlock(options = {}) {
+        const { allowPrompt = true } = options;
         const errorEl = document.getElementById('error');
         errorEl.textContent = '';
 
@@ -436,6 +437,10 @@
 
         let passphrase = getStoredPassphrase();
         if (!passphrase) {
+          if (!allowPrompt) {
+            // Auto-unlock path: do nothing if no stored key
+            return;
+          }
           passphrase = prompt('Enter your 3-word phonetic key (example: alpha-bravo-charlie):', '');
           if (!passphrase) {
             errorEl.textContent = 'Passphrase is required to decrypt.';
@@ -460,7 +465,7 @@
       }
 
       document.getElementById('btn-unlock').addEventListener('click', () => {
-        unlock();
+        unlock({ allowPrompt: true });
       });
 
       document.getElementById('btn-forget').addEventListener('click', () => {
@@ -470,6 +475,11 @@
       });
 
       updateKeyStatus();
+
+      // Auto-unlock on load if a passphrase is already stored
+      if (getStoredPassphrase()) {
+        unlock({ allowPrompt: false }).catch(() => {});
+      }
     </script>
   </div>
 </body>
