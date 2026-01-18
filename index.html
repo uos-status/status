@@ -41,7 +41,7 @@
 
     h2 {
       font-size: 1.1rem;
-      margin: 1.5rem 0 0.4rem;
+      margin: 0 0 0.5rem;
     }
 
     .tagline {
@@ -58,11 +58,34 @@
       box-shadow: 0 14px 40px rgba(15, 23, 42, 0.8);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+    .muted { color: var(--muted); }
+
+    .mono { font-family: var(--mono); }
+
+    .hidden { display: none; }
+
+    .unlock-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .unlock-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .unlock-input::placeholder {
+      color: var(--muted);
+      opacity: 0.8;
     }
 
     .pill {
@@ -85,13 +108,8 @@
       background: var(--danger);
     }
 
-    .pill-dot.ok {
-      background: var(--ok);
-    }
-
-    .pill-dot.warn {
-      background: #eab308;
-    }
+    .pill-dot.ok { background: var(--ok); }
+    .pill-dot.warn { background: #eab308; }
 
     .status-line {
       display: flex;
@@ -163,10 +181,6 @@
     .chip-dot.ok { background: var(--ok); }
     .chip-dot.warn { background: #eab308; }
 
-    .muted { color: var(--muted); }
-
-    .mono { font-family: var(--mono); }
-
     .footer {
       margin-top: 1.25rem;
       font-size: 0.75rem;
@@ -197,7 +211,6 @@
 
     @media (max-width: 720px) {
       body { padding: 1rem; }
-      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -205,47 +218,59 @@
   <div class="page">
     <header>
       <h1>Network Status</h1>
-      <p class="tagline">Encrypted status snapshot. Decrypt locally with your 3‑word phonetic key.</p>
+      <p class="tagline">Encrypted status snapshot. Enter your 3‑word phonetic key to view it.</p>
     </header>
 
-    <section class="card">
-      <div class="pill" id="pill-status">
-        <span class="pill-dot" id="pill-dot"></span>
-        <span id="pill-text">Waiting for decryption · Press "Unlock"</span>
-      </div>
-
-      <div class="status-line">
-        <div class="status-label">Snapshot</div>
-        <div class="status-value" id="status-generated">-</div>
-      </div>
-      <div class="status-line">
-        <div class="status-label">Hosts</div>
-        <div class="status-value" id="status-hosts">-</div>
-      </div>
-      <div class="status-line">
-        <div class="status-label">Key</div>
-        <div class="status-value" id="status-key">not loaded</div>
-      </div>
-
-      <div style="margin-top:0.75rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+    <section class="card" id="unlock-card">
+      <h2>Unlock</h2>
+      <p class="muted" style="font-size:0.85rem; margin:0;">Example key: <span class="mono">alpha-bravo-charlie</span></p>
+      <div class="unlock-row">
+        <input
+          id="passphrase-input"
+          class="unlock-input"
+          type="password"
+          spellcheck="false"
+          autocomplete="off"
+          placeholder="alpha-bravo-charlie"
+        />
         <button id="btn-unlock">Unlock</button>
-        <button id="btn-forget">Forget key</button>
-        <span class="muted" style="font-size:0.78rem;">Key example: <span class="mono">alpha-bravo-charlie</span></span>
       </div>
-
+      <div style="margin-top:0.5rem; font-size:0.8rem; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+        <span class="muted">Stored key: <span id="status-key" class="status-value warn">not stored</span></span>
+        <button id="btn-forget">Forget key</button>
+        <span class="muted">Key stays in this browser only.</span>
+      </div>
       <div class="error" id="error"></div>
     </section>
 
-    <section class="card" style="margin-top:1rem;">
-      <h2>Hosts</h2>
-      <div id="hosts-table-wrapper" class="muted" style="font-size:0.85rem;">Encrypted payload not yet unlocked.</div>
-    </section>
+    <div id="main-content" class="hidden" style="margin-top:1rem;">
+      <section class="card">
+        <div class="pill" id="pill-status">
+          <span class="pill-dot" id="pill-dot"></span>
+          <span id="pill-text">Waiting for decryption</span>
+        </div>
 
-    <footer class="footer">
-      <div>Data is encrypted end-to-end with a passphrase-derived key; the passphrase never leaves your browser.</div>
-    </footer>
+        <div class="status-line">
+          <div class="status-label">Snapshot</div>
+          <div class="status-value" id="status-generated">-</div>
+        </div>
+        <div class="status-line">
+          <div class="status-label">Hosts</div>
+          <div class="status-value" id="status-hosts">-</div>
+        </div>
+      </section>
 
-    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"ROWtR3tj4mL1cZm5J98ruA==","iv":"q1HDNcVrgQtDp5Qs","data":"CGQq0waNwtz97YVGXkxcwK4oeXBOkHeKeq+pr7lA1OQruibqxgANfoEN2ntuq58JpIgWxPQl8Xq3PU+N8WaAmLH0QTxVe6w8LAXlmP1NE5ptFeXx6X2wkyYbUzweU1cFQPHGWTw3EY1UOsk8C5FzEOkT8+WBMwZrxpYESpALHFMLJ/1YbLzWpirkBXrDrk8X2eK+M27rjclVyBbUM87I45qr+GX6os9P8U83BChKzRD7klrpPrix5Erz/R4cqEIcNhz+MUIqr4bsne/02wG20KmLBmqaFgdF24pkm5d8EztAjOIUk6QH3LrKHmQaPTdNV1rP4ICFITAw5v0FfqqX+ZF8LpswJPC/Av8j8RU3y/hgSdCWJ7uyG0bL3IVn"}</script>
+      <section class="card" style="margin-top:1rem;">
+        <h2>Hosts</h2>
+        <div id="hosts-table-wrapper" class="muted" style="font-size:0.85rem;">Encrypted payload not yet unlocked.</div>
+      </section>
+
+      <footer class="footer">
+        <div>Data is encrypted end-to-end with a passphrase-derived key; the passphrase never leaves your browser.</div>
+      </footer>
+    </div>
+
+    <script id="encrypted-data" type="application/json">{"v":1,"algo":"AES-GCM","kdf":"PBKDF2","iterations":200000,"salt":"MuOKmMWEYeVe4FJE22d+4g==","iv":"0RUgLWLYqUm9uDvX","data":"wDPPaSkFHLFQRnbDxtNL5+l/2ws3hzRLnynsiDb8LVaeieO0MLx+1Zei2sYsNnlds3n/GtUJKdF9jdGZmGHSCltbvdydmM8UsQm5bKPozcNzoYrJMXmXjWbgpuYKuyzzE11mf6fpUPVGq/1JRxHCd3dVqVmFlJbJNwD9Rdss4xlaarPLeVD6vmgMkYhL+TKh/hRnAoJc1cYh2DtTAfLKok5IaNBv+0cU44/YCauV5sNfnJIu/T+L5QkoI/HS9dcl1XSkME6khD1N82PFjDaB37AUCExwG9Y39pXvI5O6KfThv83O8fybK7W8ODlC6J5oZsJF22Ms0AxAztWXGFRDZaw1qX/RlOZYu+H9e3/lMWbDVH3e2fl7uhl9W1w0"}</script>
 
     <script>
       const STORAGE_KEY = 'networkStatus.passphrase';
@@ -404,6 +429,7 @@
       function updateKeyStatus() {
         const el = document.getElementById('status-key');
         const value = getStoredPassphrase();
+        if (!el) return;
         if (!value) {
           el.textContent = 'not stored';
           el.className = 'status-value warn';
@@ -415,15 +441,17 @@
       }
 
       async function unlock(options = {}) {
-        const { allowPrompt = true } = options;
+        const { auto = false } = options;
         const errorEl = document.getElementById('error');
-        errorEl.textContent = '';
+        if (errorEl) errorEl.textContent = '';
 
         const scriptEl = document.getElementById('encrypted-data');
-        const raw = scriptEl.textContent.trim();
+        const raw = scriptEl ? scriptEl.textContent.trim() : '';
 
         if (!raw || raw === '__ENCRYPTED_JSON__') {
-          errorEl.textContent = 'No encrypted payload embedded (cron job may not have run yet).';
+          if (!auto && errorEl) {
+            errorEl.textContent = 'No encrypted payload embedded (cron job may not have run yet).';
+          }
           return;
         }
 
@@ -431,22 +459,25 @@
         try {
           payload = JSON.parse(raw);
         } catch (e) {
-          errorEl.textContent = 'Failed to parse encrypted payload.';
+          if (!auto && errorEl) errorEl.textContent = 'Failed to parse encrypted payload.';
           return;
         }
 
+        const inputEl = document.getElementById('passphrase-input');
+        const inputValue = inputEl ? inputEl.value.trim() : '';
+
         let passphrase = getStoredPassphrase();
-        if (!passphrase) {
-          if (!allowPrompt) {
-            // Auto-unlock path: do nothing if no stored key
-            return;
-          }
-          passphrase = prompt('Enter your 3-word phonetic key (example: alpha-bravo-charlie):', '');
-          if (!passphrase) {
-            errorEl.textContent = 'Passphrase is required to decrypt.';
-            return;
-          }
+        if (inputValue) {
+          passphrase = inputValue;
           setStoredPassphrase(passphrase);
+          inputEl.value = '';
+        }
+
+        if (!passphrase) {
+          if (!auto && errorEl) {
+            errorEl.textContent = 'Passphrase is required to decrypt.';
+          }
+          return;
         }
 
         updateKeyStatus();
@@ -456,29 +487,36 @@
           const data = JSON.parse(plaintext);
           updateSummary(data);
           renderHostsTable(data);
+
+          const main = document.getElementById('main-content');
+          if (main) main.classList.remove('hidden');
         } catch (e) {
           console.error(e);
-          errorEl.textContent = 'Decryption failed. Check your passphrase (3-word key).';
           setStoredPassphrase('');
           updateKeyStatus();
+          if (!auto && errorEl) {
+            errorEl.textContent = 'Decryption failed. Check your passphrase (3-word key).';
+          }
         }
       }
 
       document.getElementById('btn-unlock').addEventListener('click', () => {
-        unlock({ allowPrompt: true });
+        unlock({ auto: false });
       });
 
       document.getElementById('btn-forget').addEventListener('click', () => {
         setStoredPassphrase('');
         updateKeyStatus();
-        document.getElementById('error').textContent = 'Stored key cleared. Use "Unlock" to enter it again.';
+        const main = document.getElementById('main-content');
+        if (main) main.classList.add('hidden');
+        const errorEl = document.getElementById('error');
+        if (errorEl) errorEl.textContent = 'Stored key cleared. Enter it again to unlock.';
       });
 
       updateKeyStatus();
 
-      // Auto-unlock on load if a passphrase is already stored
       if (getStoredPassphrase()) {
-        unlock({ allowPrompt: false }).catch(() => {});
+        unlock({ auto: true }).catch(() => {});
       }
     </script>
   </div>
